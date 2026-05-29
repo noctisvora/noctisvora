@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Noctisvora Admin Pro</title>
+
+<style>
+
+body{
+    margin:0;
+    background:#0b0b0f;
+    color:#eaeaea;
+    font-family:system-ui, Poppins, sans-serif;
+    padding:25px;
+}
+
+/* TOP BAR */
+h1{
+    margin-bottom:10px;
+    font-weight:600;
+}
+
+.stats{
+    display:flex;
+    gap:15px;
+    margin:20px 0;
+    flex-wrap:wrap;
+}
+
+.stat{
+    background:#141420;
+    padding:12px 18px;
+    border-radius:14px;
+    border:1px solid rgba(255,255,255,0.06);
+    min-width:120px;
+}
+
+.stat span{
+    font-size:20px;
+    font-weight:bold;
+    display:block;
+    margin-top:5px;
+}
+
+/* SEARCH BAR */
+.topbar{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin:15px 0 25px;
+}
+
+input, select{
+    padding:10px 12px;
+    border-radius:10px;
+    border:none;
+    outline:none;
+    background:#1a1a24;
+    color:white;
+}
+
+/* CARDS */
+.card{
+    background:linear-gradient(145deg,#141420,#101018);
+    padding:18px;
+    border-radius:16px;
+    margin-bottom:15px;
+    border:1px solid rgba(255,255,255,0.06);
+}
+
+.card h3{
+    margin:0 0 5px;
+}
+
+small{
+    color:#9aa0a6;
+}
+
+/* BUTTONS */
+.btn{
+    padding:7px 10px;
+    margin-right:5px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:12px;
+}
+
+.pending{ background:#6b6b6b; color:white; }
+.progress{ background:#ff9f1c; color:black; }
+.done{ background:#2ecc71; color:black; }
+.delete{ background:#ff4d4d; color:white; }
+
+.btn:hover{
+    opacity:0.85;
+}
+
+.status{
+    margin-top:8px;
+    font-weight:600;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>🚀 Noctisvora Admin Dashboard</h1>
+
+<!-- STATS -->
+<div class="stats">
+    <div class="stat">Pending <span id="pendingCount">0</span></div>
+    <div class="stat">In Progress <span id="progressCount">0</span></div>
+    <div class="stat">Completed <span id="doneCount">0</span></div>
+</div>
+
+<!-- SEARCH -->
+<div class="topbar">
+    <input id="search" placeholder="Search name/email...">
+    <select id="filter">
+        <option value="All">All</option>
+        <option value="Pending">Pending</option>
+        <option value="In Progress">In Progress</option>
+        <option value="Completed">Completed</option>
+    </select>
+</div>
+
+<div id="container"></div>
+
+<script>
+
+if(localStorage.getItem("adminLoggedIn") !== "true"){
+    window.location.href = "admin-login.html";
+}
+
+let dataStore = [];
+
+async function loadData(){
+
+    const res = await fetch("http://localhost:3000/requests");
+    dataStore = await res.json();
+
+    updateStats();
+    render();
+}
+
+/* STATS FUNCTION */
+function updateStats(){
+
+    let pending = 0, progress = 0, done = 0;
+
+    dataStore.forEach(i=>{
+        if(i.status === "Pending") pending++;
+        else if(i.status === "In Progress") progress++;
+        else if(i.status === "Completed") done++;
+    });
+
+    document.getElementById("pendingCount").innerText = pending;
+    document.getElementById("progressCount").innerText = progress;
+    document.getElementById("doneCount").innerText = done;
+}
+
+/* RENDER */
+function render(){
+
+    const search = document.getElementById("search").value.toLowerCase();
+    const filter = document.getElementById("filter").value;
+
+    let filtered = dataStore.filter(item => {
+
+        return (
+            (item.name.toLowerCase().includes(search) ||
+            item.email.toLowerCase().includes(search)) &&
+            (filter === "All" || item.status === filter)
+        );
+
+    });
+
+    const container = document.getElementById("container");
+    container.innerHTML = "";
+
+    filtered.forEach(item => {
+
+        container.innerHTML += `
+        <div class="card">
+
+            <h3>${item.name}</h3>
+            <small>${item.email}</small>
+
+            <p><b>Budget:</b> ${item.budget}</p>
+            <p><b>Project:</b> ${item.project}</p>
+
+            <div class="status">Status: ${item.status}</div>
+
+            <br>
+
+            <button class="btn pending" onclick="update(${item.id},'Pending')">Pending</button>
+            <button class="btn progress" onclick="update(${item.id},'In Progress')">Progress</button>
+            <button class="btn done" onclick="update(${item.id},'Completed')">Done</button>
+            <button class="btn delete" onclick="del(${item.id})">Delete</button>
+
+        </div>
+        `;
+
+    });
+
+}
+
+/* UPDATE STATUS */
+async function update(id,status){
+
+    await fetch(`http://localhost:3000/requests/${id}`,{
+        method:"PUT",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({status})
+    });
+
+    loadData();
+
+}
+
+/* DELETE */
+async function del(id){
+
+    await fetch(`http://localhost:3000/requests/${id}`,{
+        method:"DELETE"
+    });
+
+    loadData();
+
+}
+
+/* EVENTS */
+document.getElementById("search").addEventListener("input",render);
+document.getElementById("filter").addEventListener("change",render);
+
+loadData();
+setInterval(loadData,5000);
+
+</script>
+
+</body>
+</html>

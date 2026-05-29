@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CNoctisvora</title>
+
+    <link rel="stylesheet" href="style.css" />
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- ================= NAVBAR ================= -->
+
+    <header class="navbar">
+<div class="logo">
+
+    <img src="logo.png" alt="Logo">
+
+    <span>Noctisvora</span>
+
+</div>
+
+       <nav>
+    <ul class="nav-links">
+
+        <li><a href="#services">Services</a></li>
+
+        <li><a href="#works">How It Works</a></li>
+
+        <li><a href="#team">Team</a></li>
+
+        <li><a href="#contact">Contact</a></li>
+
+    </ul>
+</nav>
+
+        <button class="nav-btn" id="getStartedBtn">
+            Get Started
+        </button>
+
+    </header>
+
+
+    <!-- ================= HERO ================= -->
+
+    <section class="hero">
+
+        <div class="hero-text hidden">
+
+            <p class="small-heading">
+                STUDENT CREATOR PLATFORM
+            </p>
+
+            <h1>
+                You need content. <br>
+                <span>We build it.</span>
+            </h1>
+
+            <p class="hero-description">
+                From thumbnails and video edits to revision notes and presentations —
+                we help students, creators, and businesses turn ideas into reality.
+            </p>
+
+            <div class="hero-buttons">
+
+                <button class="primary-btn" id="exploreBtn">
+                    Explore Services
+                </button>
+
+                <button class="secondary-btn" id="joinBtn">
+                    Join Team
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= HERO CARDS ================= -->
+
+        <div class="hero-cards">
+
+            <div class="card card1 hidden">
+                <h3>Thumbnail Design</h3>
+                <div class="dummy-box"></div>
+            </div>
+
+            <div class="card card2 hidden">
+                <h3>Revision Notes</h3>
+
+                <div class="lines">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
+
+            <div class="card card3 hidden">
+                <h3>Invitation Design</h3>
+                <div class="dummy-box second"></div>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= SERVICES ================= -->
+
+    <section class="services" id="services">
+
+        <h2 class="hidden">What We Create</h2>
+
+        <p class="section-description hidden">
+            Designed for students, creators, and everyday needs.
+        </p>
+
+        <div class="service-container">
+
+            <div class="service-card hidden">
+
+                <h3>For Students</h3>
+
+                <ul>
+                    <li>Revision Notes</li>
+                    <li>Mindmaps</li>
+                    <li>PPT Design</li>
+                    <li>Assignments</li>
+                </ul>
+
+            </div>
+
+
+            <div class="service-card hidden">
+
+                <h3>For Creators</h3>
+
+                <ul>
+                    <li>Thumbnails</li>
+                    <li>Video Editing</li>
+                    <li>Reel Captions</li>
+                    <li>Posters</li>
+                    <li>Script For Creators</li>
+                </ul>
+
+            </div>
+
+
+            <div class="service-card hidden">
+
+                <h3>For Events</h3>
+
+                <ul>
+                    <li>Wedding Cards</li>
+                    <li>Birthday Invites</li>
+                    <li>Event Posters</li>
+                    <li>Templates</li>
+                </ul>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= HOW IT WORKS ================= -->
+
+    <section class="works" id="works">
+
+        <h2 class="hidden">How It Works</h2>
+
+        <div class="work-container">
+
+            <div class="work-card hidden">
+                <span>01</span>
+                <p>Submit your requirement</p>
+            </div>
+
+            <div class="work-card hidden">
+                <span>02</span>
+                <p>Our team starts creating</p>
+            </div>
+
+            <div class="work-card hidden">
+                <span>03</span>
+                <p>Receive your final project</p>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= TEAM ================= -->
+
+    <section class="team" id="team">
+
+        <h2 class="hidden">Meet The Team</h2>
+
+        <div class="team-container">
+
+            <div class="team-card hidden">
+                <h3>Viraj</h3>
+                <p>Web Developer</p>
+            </div>
+
+            <div class="team-card hidden">
+                <h3>Adi</h3>
+                <p>Designer / Editor</p>
+            </div>
+
+            <div class="team-card hidden">
+                <h3>Om</h3>
+                <p>Script Editor</p>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= CONTACT ================= -->
+
+    <section class="contact" id="contact">
+
+        <h2 class="hidden">Start Your Project</h2>
+
+        <p class="hidden">
+            Tell us what you need and we'll build it.
+        </p>
+
+        <form class="hidden">
+            <input type="email" id="email" placeholder="Your Email" required>
+
+           <input type="text" id="name" placeholder="Your Name" required>
+
+          <input type="text" id="budget" placeholder="Budget">
+
+
+          <textarea id="project" placeholder="Describe your project..." required></textarea>
+
+            <button type="submit">
+                Submit Request
+            </button>
+
+        </form>
+
+    </section>
+
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer class="hidden">
+
+        <p>
+            Built by students with big ideas.
+        </p>
+
+    </footer>
+
+
+    <script src="script.js"></script>
+
+</body>
+</html>
