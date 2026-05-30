@@ -1,269 +1,256 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>zNoctisvora</title>
+<meta charset="UTF-8">
+<title>Noctisvora Admin Pro</title>
 
-    <link rel="stylesheet" href="style.css" />
+<style>
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+body{
+    margin:0;
+    background:#0b0b0f;
+    color:#eaeaea;
+    font-family:system-ui, Poppins, sans-serif;
+    padding:25px;
+}
+
+/* TOP BAR */
+h1{
+    margin-bottom:10px;
+    font-weight:600;
+}
+
+.stats{
+    display:flex;
+    gap:15px;
+    margin:20px 0;
+    flex-wrap:wrap;
+}
+
+.stat{
+    background:#141420;
+    padding:12px 18px;
+    border-radius:14px;
+    border:1px solid rgba(255,255,255,0.06);
+    min-width:120px;
+}
+
+.stat span{
+    font-size:20px;
+    font-weight:bold;
+    display:block;
+    margin-top:5px;
+}
+
+/* SEARCH BAR */
+.topbar{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin:15px 0 25px;
+}
+
+input, select{
+    padding:10px 12px;
+    border-radius:10px;
+    border:none;
+    outline:none;
+    background:#1a1a24;
+    color:white;
+}
+
+/* CARDS */
+.card{
+    background:linear-gradient(145deg,#141420,#101018);
+    padding:18px;
+    border-radius:16px;
+    margin-bottom:15px;
+    border:1px solid rgba(255,255,255,0.06);
+}
+
+.card h3{
+    margin:0 0 5px;
+}
+
+small{
+    color:#9aa0a6;
+}
+
+/* BUTTONS */
+.btn{
+    padding:7px 10px;
+    margin-right:5px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:12px;
+}
+
+.pending{ background:#6b6b6b; color:white; }
+.progress{ background:#ff9f1c; color:black; }
+.done{ background:#2ecc71; color:black; }
+.delete{ background:#ff4d4d; color:white; }
+
+.btn:hover{
+    opacity:0.85;
+}
+
+.status{
+    margin-top:8px;
+    font-weight:600;
+}
+
+</style>
+
 </head>
 
 <body>
 
-    <!-- ================= NAVBAR ================= -->
+<h1>🚀 Noctisvora Admin Dashboard</h1>
 
-    <header class="navbar">
-<div class="logo">
-
-    <img src="logo.png" alt="Logo">
-
-    <span>Noctisvora</span>
-
+<!-- STATS -->
+<div class="stats">
+    <div class="stat">Pending <span id="pendingCount">0</span></div>
+    <div class="stat">In Progress <span id="progressCount">0</span></div>
+    <div class="stat">Completed <span id="doneCount">0</span></div>
 </div>
 
-       <nav>
-    <ul class="nav-links">
+<!-- SEARCH -->
+<div class="topbar">
+    <input id="search" placeholder="Search name/email...">
+    <select id="filter">
+        <option value="All">All</option>
+        <option value="Pending">Pending</option>
+        <option value="In Progress">In Progress</option>
+        <option value="Completed">Completed</option>
+    </select>
+</div>
 
-        <li><a href="#services">Services</a></li>
+<div id="container"></div>
 
-        <li><a href="#works">How It Works</a></li>
+<script>
 
-        <li><a href="#team">Team</a></li>
+if (localStorage.getItem("adminLoggedIn") !== "true") {
+    window.location.href = "admin-login.html";
+}
 
-        <li><a href="#contact">Contact</a></li>
+const BASE_URL = "https://noctisvora.onrender.com";
 
-    </ul>
-</nav>
+let dataStore = [];
 
-        <button class="nav-btn" id="getStartedBtn">
-            Get Started
-        </button>
+/* ================= LOAD ================= */
 
-    </header>
+async function loadData() {
+    try {
+        const res = await fetch(`${BASE_URL}/requests`);
+        dataStore = await res.json();
 
+        updateStats();
+        render();
 
-    <!-- ================= HERO ================= -->
+    } catch (err) {
+        console.log("Fetch Error:", err);
+    }
+}
 
-    <section class="hero">
+/* ================= STATS ================= */
 
-        <div class="hero-text hidden">
+function updateStats() {
 
-            <p class="small-heading">
-                STUDENT CREATOR PLATFORM
-            </p>
+    let pending = 0, progress = 0, done = 0;
 
-            <h1>
-                You need content. <br>
-                <span>We build it.</span>
-            </h1>
+    dataStore.forEach(i => {
 
-            <p class="hero-description">
-                From thumbnails and video edits to revision notes and presentations —
-                we help students, creators, and businesses turn ideas into reality.
-            </p>
+        const status = i.status || "Pending";
 
-            <div class="hero-buttons">
+        if (status === "Pending") pending++;
+        else if (status === "In Progress") progress++;
+        else if (status === "Completed") done++;
 
-                <button class="primary-btn" id="exploreBtn">
-                    Explore Services
-                </button>
+    });
 
-                <button class="secondary-btn" id="joinBtn">
-                    Join Team
-                </button>
+    document.getElementById("pendingCount").innerText = pending;
+    document.getElementById("progressCount").innerText = progress;
+    document.getElementById("doneCount").innerText = done;
+}
 
-            </div>
+/* ================= RENDER ================= */
 
-        </div>
+function render() {
 
+    const search = document.getElementById("search").value.toLowerCase();
+    const filter = document.getElementById("filter").value;
 
-        <!-- ================= HERO CARDS ================= -->
+    let filtered = dataStore.filter(item => {
 
-        <div class="hero-cards">
+        const status = item.status || "Pending";
 
-            <div class="card card1 hidden">
-                <h3>Thumbnail Design</h3>
-                <div class="dummy-box"></div>
-            </div>
+        return (
+            (item.name?.toLowerCase().includes(search) ||
+             item.email?.toLowerCase().includes(search)) &&
+            (filter === "All" || status === filter)
+        );
 
-            <div class="card card2 hidden">
-                <h3>Revision Notes</h3>
+    });
 
-                <div class="lines">
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                </div>
-            </div>
+    const container = document.getElementById("container");
+    container.innerHTML = "";
 
-            <div class="card card3 hidden">
-                <h3>Invitation Design</h3>
-                <div class="dummy-box second"></div>
-            </div>
+    filtered.forEach(item => {
 
-        </div>
+        container.innerHTML += `
+        <div class="card">
 
-    </section>
+            <h3>${item.name}</h3>
+            <small>${item.email}</small>
 
+            <p><b>Budget:</b> ${item.budget}</p>
+            <p><b>Project:</b> ${item.project}</p>
 
-    <!-- ================= SERVICES ================= -->
+            <div class="status">Status: ${item.status || "Pending"}</div>
 
-    <section class="services" id="services">
+            <br>
 
-        <h2 class="hidden">What We Create</h2>
-
-        <p class="section-description hidden">
-            Designed for students, creators, and everyday needs.
-        </p>
-
-        <div class="service-container">
-
-            <div class="service-card hidden">
-
-                <h3>For Students</h3>
-
-                <ul>
-                    <li>Revision Notes</li>
-                    <li>Mindmaps</li>
-                    <li>PPT Design</li>
-                    <li>Assignments</li>
-                </ul>
-
-            </div>
-
-
-            <div class="service-card hidden">
-
-                <h3>For Creators</h3>
-
-                <ul>
-                    <li>Thumbnails</li>
-                    <li>Video Editing</li>
-                    <li>Reel Captions</li>
-                    <li>Posters</li>
-                    <li>Script For Creators</li>
-                </ul>
-
-            </div>
-
-
-            <div class="service-card hidden">
-
-                <h3>For Events</h3>
-
-                <ul>
-                    <li>Wedding Cards</li>
-                    <li>Birthday Invites</li>
-                    <li>Event Posters</li>
-                    <li>Templates</li>
-                </ul>
-
-            </div>
+            <button class="btn pending" onclick="updateStatus(${item.id},'Pending')">Pending</button>
+            <button class="btn progress" onclick="updateStatus(${item.id},'In Progress')">Progress</button>
+            <button class="btn done" onclick="updateStatus(${item.id},'Completed')">Done</button>
+            <button class="btn delete" onclick="deleteReq(${item.id})">Delete</button>
 
         </div>
+        `;
+    });
+}
 
-    </section>
+/* ================= UPDATE ================= */
 
+async function updateStatus(id, status) {
+    await fetch(`${BASE_URL}/requests/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status })
+    });
 
-    <!-- ================= HOW IT WORKS ================= -->
+    loadData();
+}
 
-    <section class="works" id="works">
+/* ================= DELETE ================= */
 
-        <h2 class="hidden">How It Works</h2>
+async function deleteReq(id) {
+    await fetch(`${BASE_URL}/requests/${id}`, {
+        method: "DELETE"
+    });
 
-        <div class="work-container">
+    loadData();
+}
 
-            <div class="work-card hidden">
-                <span>01</span>
-                <p>Submit your requirement</p>
-            </div>
+/* ================= EVENTS ================= */
 
-            <div class="work-card hidden">
-                <span>02</span>
-                <p>Our team starts creating</p>
-            </div>
+document.getElementById("search").addEventListener("input", render);
+document.getElementById("filter").addEventListener("change", render);
 
-            <div class="work-card hidden">
-                <span>03</span>
-                <p>Receive your final project</p>
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- ================= TEAM ================= -->
-
-    <section class="team" id="team">
-
-        <h2 class="hidden">Meet The Team</h2>
-
-        <div class="team-container">
-
-            <div class="team-card hidden">
-                <h3>Viraj</h3>
-                <p>Web Developer</p>
-            </div>
-
-            <div class="team-card hidden">
-                <h3>Adi</h3>
-                <p>Designer / Editor</p>
-            </div>
-
-            <div class="team-card hidden">
-                <h3>Om</h3>
-                <p>Script Editor</p>
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- ================= CONTACT ================= -->
-
-    <section class="contact" id="contact">
-
-        <h2 class="hidden">Start Your Project</h2>
-
-        <p class="hidden">
-            Tell us what you need and we'll build it.
-        </p>
-
-        <form class="hidden">
-            <input type="email" id="email" placeholder="Your Email" required>
-
-           <input type="text" id="name" placeholder="Your Name" required>
-
-          <input type="text" id="budget" placeholder="Budget">
-
-
-          <textarea id="project" placeholder="Describe your project..." required></textarea>
-
-            <button type="submit">
-                Submit Request
-            </button>
-
-        </form>
-
-    </section>
-
-
-    <!-- ================= FOOTER ================= -->
-
-    <footer class="hidden">
-
-        <p>
-            Built by students with big ideas.
-        </p>
-
-    </footer>
-
-
-    <script src="script.js"></script>
+loadData();
+setInterval(loadData, 5000);
+</script>
 
 </body>
 </html>
