@@ -1,244 +1,269 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Noctisvora Admin Pro</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>zNoctisvora</title>
 
-<style>
+    <link rel="stylesheet" href="style.css" />
 
-body{
-    margin:0;
-    background:#0b0b0f;
-    color:#eaeaea;
-    font-family:system-ui, Poppins, sans-serif;
-    padding:25px;
-}
-
-/* TOP BAR */
-h1{
-    margin-bottom:10px;
-    font-weight:600;
-}
-
-.stats{
-    display:flex;
-    gap:15px;
-    margin:20px 0;
-    flex-wrap:wrap;
-}
-
-.stat{
-    background:#141420;
-    padding:12px 18px;
-    border-radius:14px;
-    border:1px solid rgba(255,255,255,0.06);
-    min-width:120px;
-}
-
-.stat span{
-    font-size:20px;
-    font-weight:bold;
-    display:block;
-    margin-top:5px;
-}
-
-/* SEARCH BAR */
-.topbar{
-    display:flex;
-    gap:10px;
-    flex-wrap:wrap;
-    margin:15px 0 25px;
-}
-
-input, select{
-    padding:10px 12px;
-    border-radius:10px;
-    border:none;
-    outline:none;
-    background:#1a1a24;
-    color:white;
-}
-
-/* CARDS */
-.card{
-    background:linear-gradient(145deg,#141420,#101018);
-    padding:18px;
-    border-radius:16px;
-    margin-bottom:15px;
-    border:1px solid rgba(255,255,255,0.06);
-}
-
-.card h3{
-    margin:0 0 5px;
-}
-
-small{
-    color:#9aa0a6;
-}
-
-/* BUTTONS */
-.btn{
-    padding:7px 10px;
-    margin-right:5px;
-    border:none;
-    border-radius:8px;
-    cursor:pointer;
-    font-size:12px;
-}
-
-.pending{ background:#6b6b6b; color:white; }
-.progress{ background:#ff9f1c; color:black; }
-.done{ background:#2ecc71; color:black; }
-.delete{ background:#ff4d4d; color:white; }
-
-.btn:hover{
-    opacity:0.85;
-}
-
-.status{
-    margin-top:8px;
-    font-weight:600;
-}
-
-</style>
-
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 
 <body>
 
-<h1>🚀 Noctisvora Admin Dashboard</h1>
+    <!-- ================= NAVBAR ================= -->
 
-<!-- STATS -->
-<div class="stats">
-    <div class="stat">Pending <span id="pendingCount">0</span></div>
-    <div class="stat">In Progress <span id="progressCount">0</span></div>
-    <div class="stat">Completed <span id="doneCount">0</span></div>
+    <header class="navbar">
+<div class="logo">
+
+    <img src="logo.png" alt="Logo">
+
+    <span>Noctisvora</span>
+
 </div>
 
-<!-- SEARCH -->
-<div class="topbar">
-    <input id="search" placeholder="Search name/email...">
-    <select id="filter">
-        <option value="All">All</option>
-        <option value="Pending">Pending</option>
-        <option value="In Progress">In Progress</option>
-        <option value="Completed">Completed</option>
-    </select>
-</div>
+       <nav>
+    <ul class="nav-links">
 
-<div id="container"></div>
+        <li><a href="#services">Services</a></li>
 
-<script>
+        <li><a href="#works">How It Works</a></li>
 
-if(localStorage.getItem("adminLoggedIn") !== "true"){
-    window.location.href = "admin-login.html";
-}
+        <li><a href="#team">Team</a></li>
 
-let dataStore = [];
+        <li><a href="#contact">Contact</a></li>
 
-async function loadData(){
+    </ul>
+</nav>
 
-    const res = await fetch("http://localhost:3000/requests");
-    dataStore = await res.json();
+        <button class="nav-btn" id="getStartedBtn">
+            Get Started
+        </button>
 
-    updateStats();
-    render();
-}
+    </header>
 
-/* STATS FUNCTION */
-function updateStats(){
 
-    let pending = 0, progress = 0, done = 0;
+    <!-- ================= HERO ================= -->
 
-    dataStore.forEach(i=>{
-        if(i.status === "Pending") pending++;
-        else if(i.status === "In Progress") progress++;
-        else if(i.status === "Completed") done++;
-    });
+    <section class="hero">
 
-    document.getElementById("pendingCount").innerText = pending;
-    document.getElementById("progressCount").innerText = progress;
-    document.getElementById("doneCount").innerText = done;
-}
+        <div class="hero-text hidden">
 
-/* RENDER */
-function render(){
+            <p class="small-heading">
+                STUDENT CREATOR PLATFORM
+            </p>
 
-    const search = document.getElementById("search").value.toLowerCase();
-    const filter = document.getElementById("filter").value;
+            <h1>
+                You need content. <br>
+                <span>We build it.</span>
+            </h1>
 
-    let filtered = dataStore.filter(item => {
+            <p class="hero-description">
+                From thumbnails and video edits to revision notes and presentations —
+                we help students, creators, and businesses turn ideas into reality.
+            </p>
 
-        return (
-            (item.name.toLowerCase().includes(search) ||
-            item.email.toLowerCase().includes(search)) &&
-            (filter === "All" || item.status === filter)
-        );
+            <div class="hero-buttons">
 
-    });
+                <button class="primary-btn" id="exploreBtn">
+                    Explore Services
+                </button>
 
-    const container = document.getElementById("container");
-    container.innerHTML = "";
+                <button class="secondary-btn" id="joinBtn">
+                    Join Team
+                </button>
 
-    filtered.forEach(item => {
-
-        container.innerHTML += `
-        <div class="card">
-
-            <h3>${item.name}</h3>
-            <small>${item.email}</small>
-
-            <p><b>Budget:</b> ${item.budget}</p>
-            <p><b>Project:</b> ${item.project}</p>
-
-            <div class="status">Status: ${item.status}</div>
-
-            <br>
-
-            <button class="btn pending" onclick="update(${item.id},'Pending')">Pending</button>
-            <button class="btn progress" onclick="update(${item.id},'In Progress')">Progress</button>
-            <button class="btn done" onclick="update(${item.id},'Completed')">Done</button>
-            <button class="btn delete" onclick="del(${item.id})">Delete</button>
+            </div>
 
         </div>
-        `;
 
-    });
 
-}
+        <!-- ================= HERO CARDS ================= -->
 
-/* UPDATE STATUS */
-async function update(id,status){
+        <div class="hero-cards">
 
-    await fetch(`http://localhost:3000/requests/${id}`,{
-        method:"PUT",
-        headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({status})
-    });
+            <div class="card card1 hidden">
+                <h3>Thumbnail Design</h3>
+                <div class="dummy-box"></div>
+            </div>
 
-    loadData();
+            <div class="card card2 hidden">
+                <h3>Revision Notes</h3>
 
-}
+                <div class="lines">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
 
-/* DELETE */
-async function del(id){
+            <div class="card card3 hidden">
+                <h3>Invitation Design</h3>
+                <div class="dummy-box second"></div>
+            </div>
 
-    await fetch(`http://localhost:3000/requests/${id}`,{
-        method:"DELETE"
-    });
+        </div>
 
-    loadData();
+    </section>
 
-}
 
-/* EVENTS */
-document.getElementById("search").addEventListener("input",render);
-document.getElementById("filter").addEventListener("change",render);
+    <!-- ================= SERVICES ================= -->
 
-loadData();
-setInterval(loadData,5000);
+    <section class="services" id="services">
 
-</script>
+        <h2 class="hidden">What We Create</h2>
+
+        <p class="section-description hidden">
+            Designed for students, creators, and everyday needs.
+        </p>
+
+        <div class="service-container">
+
+            <div class="service-card hidden">
+
+                <h3>For Students</h3>
+
+                <ul>
+                    <li>Revision Notes</li>
+                    <li>Mindmaps</li>
+                    <li>PPT Design</li>
+                    <li>Assignments</li>
+                </ul>
+
+            </div>
+
+
+            <div class="service-card hidden">
+
+                <h3>For Creators</h3>
+
+                <ul>
+                    <li>Thumbnails</li>
+                    <li>Video Editing</li>
+                    <li>Reel Captions</li>
+                    <li>Posters</li>
+                    <li>Script For Creators</li>
+                </ul>
+
+            </div>
+
+
+            <div class="service-card hidden">
+
+                <h3>For Events</h3>
+
+                <ul>
+                    <li>Wedding Cards</li>
+                    <li>Birthday Invites</li>
+                    <li>Event Posters</li>
+                    <li>Templates</li>
+                </ul>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= HOW IT WORKS ================= -->
+
+    <section class="works" id="works">
+
+        <h2 class="hidden">How It Works</h2>
+
+        <div class="work-container">
+
+            <div class="work-card hidden">
+                <span>01</span>
+                <p>Submit your requirement</p>
+            </div>
+
+            <div class="work-card hidden">
+                <span>02</span>
+                <p>Our team starts creating</p>
+            </div>
+
+            <div class="work-card hidden">
+                <span>03</span>
+                <p>Receive your final project</p>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= TEAM ================= -->
+
+    <section class="team" id="team">
+
+        <h2 class="hidden">Meet The Team</h2>
+
+        <div class="team-container">
+
+            <div class="team-card hidden">
+                <h3>Viraj</h3>
+                <p>Web Developer</p>
+            </div>
+
+            <div class="team-card hidden">
+                <h3>Adi</h3>
+                <p>Designer / Editor</p>
+            </div>
+
+            <div class="team-card hidden">
+                <h3>Om</h3>
+                <p>Script Editor</p>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= CONTACT ================= -->
+
+    <section class="contact" id="contact">
+
+        <h2 class="hidden">Start Your Project</h2>
+
+        <p class="hidden">
+            Tell us what you need and we'll build it.
+        </p>
+
+        <form class="hidden">
+            <input type="email" id="email" placeholder="Your Email" required>
+
+           <input type="text" id="name" placeholder="Your Name" required>
+
+          <input type="text" id="budget" placeholder="Budget">
+
+
+          <textarea id="project" placeholder="Describe your project..." required></textarea>
+
+            <button type="submit">
+                Submit Request
+            </button>
+
+        </form>
+
+    </section>
+
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer class="hidden">
+
+        <p>
+            Built by students with big ideas.
+        </p>
+
+    </footer>
+
+
+    <script src="script.js"></script>
 
 </body>
 </html>
