@@ -10,26 +10,6 @@ const observer = new IntersectionObserver(entries => {
 
 elements.forEach(el => observer.observe(el));
 document.querySelector("form").addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    const name = document.querySelector("input[placeholder='Your Name']").value;
-    const budget = document.querySelector("input[placeholder='Budget']").value;
-    const project = document.querySelector("textarea").value;
-
-    const res = await fetch("https://noctisvora.onrender.com", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            name,
-            email: "-",
-            budget,
-            project
-        })
-    });
-
-    alert(await res.text());
-});
-document.querySelector("form").addEventListener("submit", async (e) => {
 
     e.preventDefault();
 
@@ -41,7 +21,7 @@ document.querySelector("form").addEventListener("submit", async (e) => {
 
     const project = document.getElementById("project").value;
 
-    const res = await fetch("http://localhost:3000/submit", {
+    const res = await fetch("https://noctisvora.onrender.com", {
 
         method: "POST",
 
