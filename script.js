@@ -16,7 +16,7 @@ document.querySelector("form").addEventListener("submit", async (e) => {
     const budget = document.querySelector("input[placeholder='Budget']").value;
     const project = document.querySelector("textarea").value;
 
-    const res = await fetch("http://localhost:3000/submit", {
+    const res = await fetch("https://noctisvora.onrender.com", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
