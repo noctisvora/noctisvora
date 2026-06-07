@@ -164,10 +164,21 @@ if (form) {
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
 
-        const name = document.getElementById("name").value;
-        const email = document.getElementById("email").value;
-        const budget = document.getElementById("budget").value;
-        const project = document.getElementById("project").value;
+        const name = document.getElementById("name").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const budget = document.getElementById("budget").value.trim();
+        const project = document.getElementById("project").value.trim();
+
+        // Validation
+        if (!name || !email || !project) {
+            alert("❌ Please fill in Name, Email, and Project Description");
+            return;
+        }
+
+        if (!email.includes("@")) {
+            alert("❌ Please enter a valid email address");
+            return;
+        }
 
         try {
             const res = await fetch("https://noctisvora.onrender.com/submit", {
@@ -178,7 +189,7 @@ if (form) {
                 body: JSON.stringify({
                     name,
                     email,
-                    budget,
+                    budget: budget || "Not specified",
                     project
                 })
             });
@@ -186,16 +197,21 @@ if (form) {
             const data = await res.json();
             console.log("Response:", data);
 
-            if (data.success) {
+            if (res.ok && data.success) {
                 alert("🚀 Request Submitted Successfully!");
+                console.log("✅ Request saved to backend");
                 form.reset();
+            } else if (res.ok && !data.success) {
+                alert("⚠️ Request submitted but may not have saved. Please try again.");
+                console.warn("Response not successful:", data);
             } else {
-                alert("❌ Submission Failed");
+                alert("❌ Submission Failed: " + (data.message || "Unknown error"));
+                console.error("HTTP Error:", res.status, data);
             }
 
         } catch (err) {
-            console.log("ERROR:", err);
-            alert("❌ Server Error");
+            console.error("Network Error:", err);
+            alert("❌ Network Error - Backend may be down. Please try again later.");
         }
     });
 }
