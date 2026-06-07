@@ -84,12 +84,14 @@ small{
     border-radius:8px;
     cursor:pointer;
     font-size:12px;
+    transition: all 0.2s;
 }
 
 .pending{ background:#6b6b6b; color:white; }
 .progress{ background:#ff9f1c; color:black; }
 .done{ background:#2ecc71; color:black; }
 .delete{ background:#ff4d4d; color:white; }
+.toggle-btn{ background:#4a4a8f; color:white; padding:10px 15px; font-size:14px; font-weight:600; margin-bottom:20px; }
 
 .btn:hover{
     opacity:0.85;
@@ -98,6 +100,106 @@ small{
 .status{
     margin-top:8px;
     font-weight:600;
+}
+
+/* MEDIA UPLOAD SECTION */
+.media-section {
+    display:none;
+    background:linear-gradient(145deg,#141420,#101018);
+    padding:20px;
+    border-radius:16px;
+    margin-bottom:25px;
+    border:1px solid rgba(255,255,255,0.06);
+}
+
+.media-section.show {
+    display:block;
+}
+
+.media-section h2 {
+    margin-top:0;
+    font-size:18px;
+}
+
+.upload-area {
+    border:2px dashed #4a4a8f;
+    padding:30px;
+    border-radius:12px;
+    text-align:center;
+    cursor:pointer;
+    transition: all 0.3s;
+    background:#0f0f15;
+}
+
+.upload-area:hover {
+    border-color:#6a6aaf;
+    background:#131318;
+}
+
+.upload-area input {
+    display:none;
+}
+
+.upload-options {
+    display:flex;
+    gap:15px;
+    margin:20px 0;
+    flex-wrap:wrap;
+}
+
+.upload-btn {
+    flex:1;
+    min-width:150px;
+    padding:15px;
+    background:#4a4a8f;
+    color:white;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+    font-size:14px;
+    font-weight:600;
+    transition: all 0.2s;
+}
+
+.upload-btn:hover {
+    background:#6a6aaf;
+}
+
+.media-gallery {
+    margin-top:30px;
+}
+
+.media-gallery h3 {
+    margin-bottom:15px;
+}
+
+.media-item {
+    background:#0f0f15;
+    padding:15px;
+    border-radius:8px;
+    margin-bottom:15px;
+    border:1px solid rgba(255,255,255,0.06);
+}
+
+.media-item img,
+.media-item video {
+    max-width:100%;
+    height:auto;
+    border-radius:8px;
+    margin-bottom:10px;
+}
+
+.card-upload-container {
+    background:#0f0f15;
+    padding:20px;
+    border-radius:12px;
+    margin-bottom:20px;
+    border:1px solid rgba(255,255,255,0.06);
+}
+
+.card-upload-container h3 {
+    margin-top:0;
+    margin-bottom:5px;
 }
 
 </style>
@@ -114,6 +216,111 @@ small{
     <div class="stat">In Progress <span id="progressCount">0</span></div>
     <div class="stat">Completed <span id="doneCount">0</span></div>
 </div>
+
+<!-- TOGGLE MEDIA UPLOAD -->
+<button class="btn toggle-btn" id="toggleMediaBtn" onclick="toggleMediaSection()">📤 Toggle Media Upload</button>
+
+<!-- GENERAL MEDIA UPLOAD SECTION -->
+<div class="media-section" id="mediaSection">
+    <h2>📸 Upload General Media (Images & Videos)</h2>
+    
+    <div class="upload-area" onclick="document.getElementById('imageInput').click()">
+        <p>📷 Click to upload image or drag & drop</p>
+        <input type="file" id="imageInput" accept="image/*" onchange="handleImageUpload(event)">
+    </div>
+
+    <div class="upload-area" style="margin-top:15px;" onclick="document.getElementById('videoInput').click()">
+        <p>🎥 Click to upload video or drag & drop</p>
+        <input type="file" id="videoInput" accept="video/*" onchange="handleVideoUpload(event)">
+    </div>
+
+    <div class="media-gallery">
+        <h3>Uploaded General Media</h3>
+        <div id="mediaGallery"></div>
+    </div>
+</div>
+
+<!-- CARD-SPECIFIC UPLOADS -->
+<div class="media-section" id="cardUploadsSection" style="display:none; margin-bottom:25px;">
+    <h2>🎨 Upload Content For Service Cards</h2>
+    
+    <!-- FOR STUDENTS CARD -->
+    <div class="card-upload-container">
+        <h3>👨‍🎓 For Students Card</h3>
+        <p style="color:#999; font-size:13px;">Upload images/videos for the "For Students" service card</p>
+        <div class="upload-area" style="margin:15px 0;" onclick="document.getElementById('studentInput').click()">
+            <p>📤 Click to upload or drag & drop</p>
+            <input type="file" id="studentInput" accept="image/*,video/*" onchange="handleCardUpload(event, 'students')">
+        </div>
+        <div id="studentGallery"></div>
+    </div>
+
+    <!-- FOR CREATORS CARD -->
+    <div class="card-upload-container">
+        <h3>🎬 For Creators Card</h3>
+        <p style="color:#999; font-size:13px;">Upload images/videos for the "For Creators" service card</p>
+        <div class="upload-area" style="margin:15px 0;" onclick="document.getElementById('creatorInput').click()">
+            <p>📤 Click to upload or drag & drop</p>
+            <input type="file" id="creatorInput" accept="image/*,video/*" onchange="handleCardUpload(event, 'creators')">
+        </div>
+        <div id="creatorGallery"></div>
+    </div>
+
+    <!-- FOR EVENTS CARD -->
+    <div class="card-upload-container">
+        <h3>🎉 For Events Card</h3>
+        <p style="color:#999; font-size:13px;">Upload images/videos for the "For Events" service card</p>
+        <div class="upload-area" style="margin:15px 0;" onclick="document.getElementById('eventInput').click()">
+            <p>📤 Click to upload or drag & drop</p>
+            <input type="file" id="eventInput" accept="image/*,video/*" onchange="handleCardUpload(event, 'events')">
+        </div>
+        <div id="eventGallery"></div>
+    </div>
+</div>
+
+<!-- TOGGLE CARD UPLOADS BUTTON -->
+<button class="btn toggle-btn" id="toggleCardUploadsBtn" onclick="toggleCardUploads()" style="margin-bottom:20px; background:#4a6a8f;">🎨 Toggle Card Uploads</button>
+
+<!-- HERO CARDS UPLOADS -->
+<div class="media-section" id="heroUploadsSection" style="display:none; margin-bottom:25px;">
+    <h2>✨ Upload Content For Hero Cards</h2>
+    
+    <!-- THUMBNAIL DESIGN CARD -->
+    <div class="card-upload-container">
+        <h3>🎬 Thumbnail Design</h3>
+        <p style="color:#999; font-size:13px;">Upload images/videos for the "Thumbnail Design" hero card</p>
+        <div class="upload-area" style="margin:15px 0;" onclick="document.getElementById('thumbnailInput').click()">
+            <p>📤 Click to upload or drag & drop</p>
+            <input type="file" id="thumbnailInput" accept="image/*,video/*" onchange="handleHeroCardUpload(event, 'thumbnail')">
+        </div>
+        <div id="thumbnailGallery"></div>
+    </div>
+
+    <!-- REVISION NOTES CARD -->
+    <div class="card-upload-container">
+        <h3>📝 Revision Notes</h3>
+        <p style="color:#999; font-size:13px;">Upload images/videos for the "Revision Notes" hero card</p>
+        <div class="upload-area" style="margin:15px 0;" onclick="document.getElementById('revisionInput').click()">
+            <p>📤 Click to upload or drag & drop</p>
+            <input type="file" id="revisionInput" accept="image/*,video/*" onchange="handleHeroCardUpload(event, 'revision')">
+        </div>
+        <div id="revisionGallery"></div>
+    </div>
+
+    <!-- INVITATION DESIGN CARD -->
+    <div class="card-upload-container">
+        <h3>💌 Invitation Design</h3>
+        <p style="color:#999; font-size:13px;">Upload images/videos for the "Invitation Design" hero card</p>
+        <div class="upload-area" style="margin:15px 0;" onclick="document.getElementById('invitationInput').click()">
+            <p>📤 Click to upload or drag & drop</p>
+            <input type="file" id="invitationInput" accept="image/*,video/*" onchange="handleHeroCardUpload(event, 'invitation')">
+        </div>
+        <div id="invitationGallery"></div>
+    </div>
+</div>
+
+<!-- TOGGLE HERO UPLOADS BUTTON -->
+<button class="btn toggle-btn" id="toggleHeroUploadsBtn" onclick="toggleHeroUploads()" style="margin-bottom:20px; background:#6a4a8f;">✨ Toggle Hero Card Uploads</button>
 
 <!-- SEARCH -->
 <div class="topbar">
@@ -137,6 +344,293 @@ if (localStorage.getItem("adminLoggedIn") !== "true") {
 const BASE_URL = "https://noctisvora.onrender.com";
 
 let dataStore = [];
+
+/* ================= TOGGLE HERO UPLOADS ================= */
+
+function toggleHeroUploads() {
+    const heroSection = document.getElementById("heroUploadsSection");
+    heroSection.style.display = heroSection.style.display === "none" ? "block" : "none";
+    
+    const btn = document.getElementById("toggleHeroUploadsBtn");
+    if (heroSection.style.display === "block") {
+        btn.textContent = "✨ Hide Hero Card Uploads";
+        btn.style.background = "#8a6aaf";
+    } else {
+        btn.textContent = "✨ Toggle Hero Card Uploads";
+        btn.style.background = "#6a4a8f";
+    }
+}
+
+/* ================= HERO CARD UPLOAD HANDLERS ================= */
+
+function handleHeroCardUpload(event, heroType) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const heroMedia = JSON.parse(localStorage.getItem("heroMedia") || "{}");
+        if (!heroMedia[heroType]) heroMedia[heroType] = [];
+        
+        heroMedia[heroType].push({
+            type: file.type.includes("image") ? "image" : "video",
+            name: file.name,
+            data: e.target.result,
+            uploadedAt: new Date().toLocaleString()
+        });
+        
+        localStorage.setItem("heroMedia", JSON.stringify(heroMedia));
+        displayHeroGalleries();
+        
+        if (heroType === "thumbnail") document.getElementById("thumbnailInput").value = "";
+        else if (heroType === "revision") document.getElementById("revisionInput").value = "";
+        else if (heroType === "invitation") document.getElementById("invitationInput").value = "";
+        
+        alert("✅ Media uploaded successfully!");
+    };
+    reader.readAsDataURL(file);
+}
+
+function displayHeroGalleries() {
+    const heroMedia = JSON.parse(localStorage.getItem("heroMedia") || "{}");
+    
+    ['thumbnail', 'revision', 'invitation'].forEach(heroType => {
+        const gallery = document.getElementById(heroType + "Gallery");
+        const media = heroMedia[heroType] || [];
+        
+        if (media.length === 0) {
+            gallery.innerHTML = "<p style='color:#999; font-size:13px;'>No media uploaded for this card</p>";
+            return;
+        }
+        
+        gallery.innerHTML = "";
+        media.forEach((item, index) => {
+            let mediaElement = "";
+            if (item.type === "image") {
+                mediaElement = `<img src="${item.data}" alt="Uploaded" style="max-width:100%; height:auto; border-radius:8px;">`;
+            } else {
+                mediaElement = `<video width="100%" controls style="border-radius:8px;"><source src="${item.data}" type="video/mp4"></video>`;
+            }
+            
+            gallery.innerHTML += `
+                <div class="media-item">
+                    ${mediaElement}
+                    <small style="color:#999;">📅 ${item.uploadedAt}</small>
+                    <br>
+                    <button class="btn delete" onclick="deleteHeroMedia('${heroType}', ${index})" style="margin-top:10px;">Delete</button>
+                </div>
+            `;
+        });
+    });
+}
+
+function deleteHeroMedia(heroType, index) {
+    if (confirm("Are you sure you want to delete this media?")) {
+        const heroMedia = JSON.parse(localStorage.getItem("heroMedia") || "{}");
+        if (heroMedia[heroType]) {
+            heroMedia[heroType].splice(index, 1);
+            localStorage.setItem("heroMedia", JSON.stringify(heroMedia));
+            displayHeroGalleries();
+            alert("✅ Media deleted successfully!");
+        }
+    }
+}
+
+displayHeroGalleries();
+
+/* ================= TOGGLE CARD UPLOADS ================= */
+
+function toggleCardUploads() {
+    const cardSection = document.getElementById("cardUploadsSection");
+    cardSection.style.display = cardSection.style.display === "none" ? "block" : "none";
+    
+    const btn = document.getElementById("toggleCardUploadsBtn");
+    if (cardSection.style.display === "block") {
+        btn.textContent = "🎨 Hide Card Uploads";
+        btn.style.background = "#6a7aaf";
+    } else {
+        btn.textContent = "🎨 Toggle Card Uploads";
+        btn.style.background = "#4a6a8f";
+    }
+}
+
+/* ================= CARD UPLOAD HANDLERS ================= */
+
+function handleCardUpload(event, cardType) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const cardMedia = JSON.parse(localStorage.getItem("cardMedia") || "{}");
+        if (!cardMedia[cardType]) cardMedia[cardType] = [];
+        
+        cardMedia[cardType].push({
+            type: file.type.includes("image") ? "image" : "video",
+            name: file.name,
+            data: e.target.result,
+            uploadedAt: new Date().toLocaleString()
+        });
+        
+        localStorage.setItem("cardMedia", JSON.stringify(cardMedia));
+        displayCardGalleries();
+        
+        if (cardType === "students") document.getElementById("studentInput").value = "";
+        else if (cardType === "creators") document.getElementById("creatorInput").value = "";
+        else if (cardType === "events") document.getElementById("eventInput").value = "";
+        
+        alert("✅ Media uploaded successfully!");
+    };
+    reader.readAsDataURL(file);
+}
+
+function displayCardGalleries() {
+    const cardMedia = JSON.parse(localStorage.getItem("cardMedia") || "{}");
+    
+    ['students', 'creators', 'events'].forEach(cardType => {
+        const gallery = document.getElementById(cardType + "Gallery");
+        const media = cardMedia[cardType] || [];
+        
+        if (media.length === 0) {
+            gallery.innerHTML = "<p style='color:#999; font-size:13px;'>No media uploaded for this card</p>";
+            return;
+        }
+        
+        gallery.innerHTML = "";
+        media.forEach((item, index) => {
+            let mediaElement = "";
+            if (item.type === "image") {
+                mediaElement = `<img src="${item.data}" alt="Uploaded" style="max-width:100%; height:auto; border-radius:8px;">`;
+            } else {
+                mediaElement = `<video width="100%" controls style="border-radius:8px;"><source src="${item.data}" type="video/mp4"></video>`;
+            }
+            
+            gallery.innerHTML += `
+                <div class="media-item">
+                    ${mediaElement}
+                    <small style="color:#999;">📅 ${item.uploadedAt}</small>
+                    <br>
+                    <button class="btn delete" onclick="deleteCardMedia('${cardType}', ${index})" style="margin-top:10px;">Delete</button>
+                </div>
+            `;
+        });
+    });
+}
+
+function deleteCardMedia(cardType, index) {
+    if (confirm("Are you sure you want to delete this media?")) {
+        const cardMedia = JSON.parse(localStorage.getItem("cardMedia") || "{}");
+        if (cardMedia[cardType]) {
+            cardMedia[cardType].splice(index, 1);
+            localStorage.setItem("cardMedia", JSON.stringify(cardMedia));
+            displayCardGalleries();
+            alert("✅ Media deleted successfully!");
+        }
+    }
+}
+
+displayCardGalleries();
+
+/* ================= TOGGLE MEDIA SECTION ================= */
+
+function toggleMediaSection() {
+    const mediaSection = document.getElementById("mediaSection");
+    mediaSection.classList.toggle("show");
+    
+    const btn = document.getElementById("toggleMediaBtn");
+    if (mediaSection.classList.contains("show")) {
+        btn.textContent = "📤 Hide Media Upload";
+        btn.style.background = "#6a6aaf";
+    } else {
+        btn.textContent = "📤 Toggle Media Upload";
+        btn.style.background = "#4a4a8f";
+    }
+}
+
+/* ================= MEDIA UPLOAD HANDLERS ================= */
+
+function handleImageUpload(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const media = JSON.parse(localStorage.getItem("uploadedMedia") || "[]");
+        media.push({
+            type: "image",
+            name: file.name,
+            data: e.target.result,
+            uploadedAt: new Date().toLocaleString()
+        });
+        localStorage.setItem("uploadedMedia", JSON.stringify(media));
+        displayMediaGallery();
+        document.getElementById("imageInput").value = "";
+        alert("✅ Image uploaded successfully!");
+    };
+    reader.readAsDataURL(file);
+}
+
+function handleVideoUpload(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const media = JSON.parse(localStorage.getItem("uploadedMedia") || "[]");
+        media.push({
+            type: "video",
+            name: file.name,
+            data: e.target.result,
+            uploadedAt: new Date().toLocaleString()
+        });
+        localStorage.setItem("uploadedMedia", JSON.stringify(media));
+        displayMediaGallery();
+        document.getElementById("videoInput").value = "";
+        alert("✅ Video uploaded successfully!");
+    };
+    reader.readAsDataURL(file);
+}
+
+function displayMediaGallery() {
+    const gallery = document.getElementById("mediaGallery");
+    const media = JSON.parse(localStorage.getItem("uploadedMedia") || "[]");
+    
+    if (media.length === 0) {
+        gallery.innerHTML = "<p style='color:#999; text-align:center;'>No media uploaded yet</p>";
+        return;
+    }
+
+    gallery.innerHTML = "";
+    media.forEach((item, index) => {
+        let mediaElement = "";
+        if (item.type === "image") {
+            mediaElement = `<img src="${item.data}" alt="Uploaded image">`;
+        } else {
+            mediaElement = `<video width="100%" controls><source src="${item.data}" type="video/mp4"></video>`;
+        }
+
+        gallery.innerHTML += `
+            <div class="media-item">
+                ${mediaElement}
+                <small style="color:#999;">📅 ${item.uploadedAt}</small>
+                <br>
+                <button class="btn delete" onclick="deleteMediaItem(${index})" style="margin-top:10px;">Delete</button>
+            </div>
+        `;
+    });
+}
+
+function deleteMediaItem(index) {
+    if (confirm("Are you sure you want to delete this media?")) {
+        const media = JSON.parse(localStorage.getItem("uploadedMedia") || "[]");
+        media.splice(index, 1);
+        localStorage.setItem("uploadedMedia", JSON.stringify(media));
+        displayMediaGallery();
+        alert("✅ Media deleted successfully!");
+    }
+}
+
+displayMediaGallery();
 
 /* ================= LOAD ================= */
 
@@ -236,11 +730,13 @@ async function updateStatus(id, status) {
 /* ================= DELETE ================= */
 
 async function deleteReq(id) {
-    await fetch(`${BASE_URL}/requests/${id}`, {
-        method: "DELETE"
-    });
+    if (confirm("Are you sure you want to delete this request?")) {
+        await fetch(`${BASE_URL}/requests/${id}`, {
+            method: "DELETE"
+        });
 
-    loadData();
+        loadData();
+    }
 }
 
 /* ================= EVENTS ================= */
