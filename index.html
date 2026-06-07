@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Noctisvora</title>
+    <title>zNoctisvora</title>
 
     <link rel="stylesheet" href="style.css" />
 
@@ -85,11 +85,13 @@
 
             <div class="card card1 hidden">
                 <h3>Thumbnail Design</h3>
+                <div id="thumbnailCardMedia" class="card-media-display"></div>
                 <div class="dummy-box"></div>
             </div>
 
             <div class="card card2 hidden">
                 <h3>Revision Notes</h3>
+                <div id="revisionCardMedia" class="card-media-display"></div>
 
                 <div class="lines">
                     <div></div>
@@ -100,6 +102,7 @@
 
             <div class="card card3 hidden">
                 <h3>Invitation Design</h3>
+                <div id="invitationCardMedia" class="card-media-display"></div>
                 <div class="dummy-box second"></div>
             </div>
 
@@ -124,6 +127,8 @@
 
                 <h3>For Students</h3>
 
+                <div id="studentsCardMedia" style="margin:15px 0; border-radius:8px; overflow:hidden;"></div>
+
                 <ul>
                     <li>Revision Notes</li>
                     <li>Mindmaps</li>
@@ -137,6 +142,8 @@
             <div class="service-card hidden">
 
                 <h3>For Creators</h3>
+
+                <div id="creatorsCardMedia" style="margin:15px 0; border-radius:8px; overflow:hidden;"></div>
 
                 <ul>
                     <li>Thumbnails</li>
@@ -152,6 +159,8 @@
             <div class="service-card hidden">
 
                 <h3>For Events</h3>
+
+                <div id="eventsCardMedia" style="margin:15px 0; border-radius:8px; overflow:hidden;"></div>
 
                 <ul>
                     <li>Wedding Cards</li>
@@ -218,6 +227,23 @@
                 <p>Script Editor</p>
             </div>
 
+        </div>
+
+    </section>
+
+
+    <!-- ================= MEDIA GALLERY ================= -->
+
+    <section class="media-showcase" id="media">
+
+        <h2 class="hidden">📸 Gallery</h2>
+
+        <p class="section-description hidden">
+            Latest uploads from our admin team.
+        </p>
+
+        <div id="mediaGallery" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:20px; margin-top:30px;">
+            <p style="grid-column:1/-1; text-align:center; color:#666;">Loading media...</p>
         </div>
 
     </section>
