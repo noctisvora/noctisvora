@@ -637,13 +637,30 @@ displayMediaGallery();
 async function loadData() {
     try {
         const res = await fetch(`${BASE_URL}/requests`);
-        dataStore = await res.json();
+        
+        if (!res.ok) {
+            console.error("Failed to fetch requests:", res.status, res.statusText);
+            console.warn("Backend may be down. Check: https://noctisvora.onrender.com/requests");
+            return;
+        }
+
+        const data = await res.json();
+        
+        if (!Array.isArray(data)) {
+            console.warn("Invalid response format:", data);
+            dataStore = [];
+        } else {
+            dataStore = data;
+            console.log("✅ Loaded " + dataStore.length + " requests from backend");
+        }
 
         updateStats();
         render();
 
     } catch (err) {
-        console.log("Fetch Error:", err);
+        console.error("Network Error fetching requests:", err);
+        console.warn("Backend URL:", BASE_URL + "/requests");
+        console.warn("Check if https://noctisvora.onrender.com is running");
     }
 }
 
