@@ -3,6 +3,7 @@
 Student-built web project for content + media handling experiments.
 
 📌 Status
+
 🟡 Paused / Archived
 💀 Not dead, just resting
 
