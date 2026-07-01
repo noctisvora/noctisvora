@@ -30,7 +30,7 @@ Student-built web project for content + media handling experiments.
 
 Building is easy in idea, harder in execution.
 
-📦 Status
+📦 Final note
 
 Project preserved as a learning snapshot.
 
