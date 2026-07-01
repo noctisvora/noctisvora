@@ -1,16 +1,31 @@
-## Hi there 👋
+🚀 Noctisvora
 
-<!--
-**noctisvora/noctisvora** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+Student-built web project for content + media handling experiments.
 
-Here are some ideas to get you started:
+📌 Status
+🟡 Paused / Archived
+💀 Not dead, just resting
 
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+💡 What we tried
+📤 Media upload system
+🗂️ Content management
+🌐 Simple workflows
+
+💥 Reality check
+💾 LocalStorage ≠ database
+☁️ Storage limits hit
+🧠 AI code needed understanding
+📚 Team priorities shifted (NEET arc unlocked 💀)
+
+👥 Team
+👑 Adi — Founder / Designer / Editor
+✍️ Merlin — Script Writer
+💻 Viraj — Web Dev / Debug department
+
+🧠 Lesson
+Building is easy in idea, harder in execution.
+
+📦 Status
+Project preserved as a learning snapshot.
+
+👨‍💻 Built by students
